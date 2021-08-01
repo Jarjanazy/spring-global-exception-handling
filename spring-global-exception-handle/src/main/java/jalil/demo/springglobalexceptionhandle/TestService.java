@@ -15,11 +15,14 @@ public class TestService
     }
 
     public String testMethod2(){
-        buggyMethod();
+        undercoverBuggyMethod();
         return "Done!";
     }
 
     private void buggyMethod(){
         throw new RuntimeException();
+    }
+    private void undercoverBuggyMethod(){
+        throw new RuntimeException("oops");
     }
 }

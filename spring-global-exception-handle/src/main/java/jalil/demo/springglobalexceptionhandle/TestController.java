@@ -9,12 +9,12 @@ public class TestController
 {
     private final TestService testService;
 
-    @GetMapping("/handlesError")
+    @GetMapping("/buggyMethod")
     public String testMeWithExceptionHandler(){
         return testService.testMethod1();
     }
 
-    @GetMapping("/doesntHandlesError")
+    @GetMapping("/potentialBuggyMethod")
     public void testMeWithoutExceptionHandler(){
         testService.testMethod2();
     }

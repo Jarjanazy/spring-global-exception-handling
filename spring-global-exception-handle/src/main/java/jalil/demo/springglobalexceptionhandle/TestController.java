@@ -7,16 +7,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController @RequiredArgsConstructor
 public class TestController
 {
-    private final TestService testService;
-
     @GetMapping("/buggyMethod")
     public String testMeWithExceptionHandler(){
-        return testService.testMethod1();
+        try{
+            buggyMethod();
+            return "Done!";
+        }catch (RuntimeException e){
+            return "An error happened!";
+        }
     }
-
     @GetMapping("/potentialBuggyMethod")
-    public void testMeWithoutExceptionHandler(){
-        testService.testMethod2();
+    public String testMeWithoutExceptionHandler(){
+        undercoverBuggyMethod();
+        return "Done!";
+    }
+    private void buggyMethod(){
+        throw new RuntimeException();
+    }
+    private void undercoverBuggyMethod(){
+        throw new RuntimeException("oops");
     }
 
 }

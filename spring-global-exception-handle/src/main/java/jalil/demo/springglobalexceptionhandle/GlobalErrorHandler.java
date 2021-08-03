@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.security.InvalidParameterException;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @ControllerAdvice @Slf4j
@@ -19,5 +23,11 @@ public class GlobalErrorHandler
         log.error("An unexpected error has happened", ex);
 
         return "An internal error has happened, please report the incident";
+    }
+    @ResponseStatus(BAD_REQUEST)
+    @ResponseBody
+    @ExceptionHandler(InvalidParameterException.class)
+    public String invalidParameterException(InvalidParameterException ex){
+        return "This is a BAD REQUEST";
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = TestController.class)
@@ -17,7 +18,7 @@ public class GlobalExceptionHandlerTest
     private MockMvc mockMvc;
 
     @Test
-    public void givenAPostRequestToBuggyEndPoint_DetectErrorMessage() throws Exception
+    public void givenAGetRequestToBuggyEndPoint_DetectErrorMessage() throws Exception
     {
         MvcResult mvcResult = mockMvc
                 .perform(get("/buggyMethod"))
@@ -28,7 +29,7 @@ public class GlobalExceptionHandlerTest
         assertEquals(response, "An error happened!");
     }
     @Test
-    public void givenAPostRequestToPotentialBuggyMethod_DetectErrorMessage() throws Exception
+    public void givenAGetRequestToPotentialBuggyMethod_DetectErrorMessage() throws Exception
     {
         MvcResult mvcResult = mockMvc
                 .perform(get("/potentialBuggyMethod"))
@@ -36,5 +37,15 @@ public class GlobalExceptionHandlerTest
                 .andReturn();
         String response = mvcResult.getResponse().getContentAsString();
         assertEquals(response, "An internal error has happened, please report the incident");
+    }
+    @Test
+    public void givenAPostRequestToBuggyMethod_DetectInvalidParameterErrorMessage() throws Exception
+    {
+        MvcResult mvcResult = mockMvc
+                .perform(post("/invalidParamMethod"))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        String response = mvcResult.getResponse().getContentAsString();
+        assertEquals(response, "This is a BAD REQUEST");
     }
 }
